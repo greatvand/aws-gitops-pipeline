@@ -35,10 +35,3 @@ resource "aws_instance" "main_ec2" {
     command = "sed -i '/^[0-9]/d' aws_hosts"
   }
 }
-
-resource "null_resource" "grafana_install" {
-  depends_on = [aws_instance.main_ec2]
-  provisioner "local-exec" {
-    command = "ansible-playbook -i aws_hosts --key-file /home/ubuntu/.ssh/mainkey playbooks/main-playbook.yml"
-  }
-}
