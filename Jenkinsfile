@@ -6,6 +6,11 @@ pipeline {
         AWS_SHARED_CREDENTIALS_FILE='/home/ubuntu/.aws/credentials'
     }
     stages {
+        stage('Init') {
+            steps {
+                sh 'terraform init -no-color'
+            }
+        }
         stage('Plan') {
             steps {
                 sh 'terraform plan -no-color'
