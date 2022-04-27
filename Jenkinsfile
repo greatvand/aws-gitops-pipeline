@@ -17,6 +17,10 @@ pipeline {
             }
         }
         stage('Validate Apply') {
+            when {
+                beforeInput true
+                branch "dev"
+            }
             input {
                 message "Do you want to apply this plan?"
                 ok "Apply"
@@ -27,7 +31,7 @@ pipeline {
         }
         stage('Apply') {
             steps {
-                sh 'terraform apply -auto-approve -no-color -var-file="test.tfvars"'
+                sh 'terraform apply -auto-approve -no-color -var-file="$BRANCH_NAME.tfvars'
             }
         }
         stage('EC2 Wait') {
@@ -36,6 +40,10 @@ pipeline {
             }
         }
         stage('Validate Ansible') {
+             when {
+                beforeInput true
+                branch "dev"
+            }
             input {
                 message "Run Ansible playbook?"
                 ok "Sure"
@@ -60,7 +68,7 @@ pipeline {
         }
         stage('Destroy') {
             steps {
-                sh 'terraform destroy -auto-approve -no-color'
+                sh 'terraform destroy -auto-approve -no-color -var-file="$BRANCH_NAME.tfvars'
             }
         }
     }
@@ -69,7 +77,7 @@ pipeline {
         echo "Success!"
       }
       failure {
-        sh 'terraform destroy -auto-approve -no-color'
+        sh 'terraform destroy -auto-approve -no-color -var-file="$BRANCH_NAME.tfvars'
       }
    }
 }
