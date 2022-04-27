@@ -13,7 +13,7 @@ pipeline {
         }
         stage('Plan') {
             steps {
-                sh 'terraform plan -no-color'
+                sh 'terraform plan -no-color -var-file="$BRANCH_NAME.tfvars'
             }
         }
         stage('Validate Apply') {
