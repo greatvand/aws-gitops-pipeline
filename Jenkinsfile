@@ -65,7 +65,7 @@ pipeline {
         stage('Validate Destroy') {
             input {
                 message "Destoy the resources?"
-                ok "Go ahead"
+                ok "Go Ahead"
             }
             steps {
                 echo 'Resource termination started'
