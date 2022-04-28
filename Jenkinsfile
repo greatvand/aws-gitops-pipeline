@@ -57,10 +57,15 @@ pipeline {
                 ansiblePlaybook(credentialsId: 'ec2-ssh-key', inventory: 'aws_hosts', playbook: 'playbooks/main-playbook.yml')
             }
         }
+        stage('Test Grafana and Prometheus') {
+          steps {
+                ansiblePlaybook(credentialsId: 'ec2-ssh-key', inventory: 'aws_hosts', playbook: 'playbooks/node-test.yml') 
+            }
+        }
         stage('Validate Destroy') {
             input {
                 message "Destoy the resources?"
-                ok "Go ahead"
+                ok "Go Ahead"
             }
             steps {
                 echo 'Resource termination started'
