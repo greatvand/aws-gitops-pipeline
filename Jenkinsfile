@@ -64,7 +64,7 @@ pipeline {
         }
         stage('Validate Destroy') {
             input {
-                message "Destoy the resources?"
+                message "Destroy the resources?"
                 ok "Go Ahead"
             }
             steps {
