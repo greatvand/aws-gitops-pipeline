@@ -1,3 +1,7 @@
+locals {
+  azs = data.aws_availability_zones.available.names
+}
+
 data "aws_availability_zones" "available" {}
 
 resource "aws_vpc" "main_vpc" {
@@ -29,23 +33,23 @@ resource "aws_default_route_table" "private_rt" {
 }
 
 resource "aws_subnet" "public_subnet" {
-  count                   = length(var.public_cidrs)
+  count                   = length(local.azs)
   vpc_id                  = aws_vpc.main_vpc.id
-  cidr_block              = var.public_cidrs[count.index]
+  cidr_block              = cidrsubnet(var.vpc_cidr, 8, count.index)
   map_public_ip_on_launch = true
-  availability_zone       = data.aws_availability_zones.available.names[count.index]
+  availability_zone       = local.azs[count.index]
 }
 
 resource "aws_subnet" "private_subnet" {
-  count                   = length(var.private_cidrs)
+  count                   = length(local.azs)
   vpc_id                  = aws_vpc.main_vpc.id
-  cidr_block              = var.private_cidrs[count.index]
+  cidr_block              = cidrsubnet(var.vpc_cidr, 8, count.index + length(local.azs))
   map_public_ip_on_launch = false
-  availability_zone       = data.aws_availability_zones.available.names[count.index]
+  availability_zone       = local.azs[count.index]
 }
 
 resource "aws_route_table_association" "public_assoc" {
-  count          = length(var.public_cidrs)
+  count          = length(local.azs)
   subnet_id      = aws_subnet.public_subnet[count.index].id
   route_table_id = aws_route_table.public_rt.id
 }
