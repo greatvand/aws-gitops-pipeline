@@ -56,7 +56,7 @@
       - /etc/prometheus/rules.d
       - /etc/prometheus/files_sd
       - /var/lib/prometheus
-  - name: set perms
+  - name: Set perms
     ansible.builtin.file:
       path: "{{ item }}"
       mode: '0755'
