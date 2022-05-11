@@ -1,5 +1,5 @@
 ---
-- name: Test for Grafana and Prometheus Access
+- name: Verify Access
   hosts: main
   gather_facts: no
   tasks:
